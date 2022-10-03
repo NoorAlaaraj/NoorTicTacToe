@@ -1,0 +1,200 @@
+h1 {
+    font-size: 100px;
+    font-style: bold;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-align: center;
+    color: maroon;
+}
+
+*, *::after,*::before {
+    box-sizing: border-box;
+}
+/* this will make styling our width and heights so much easier */
+
+:root{
+    --cell-size: 180px;
+    /*to easily modify things with our width and height and make
+sure everything's super automatic  */
+    --mark-size: calc(var(--cell-size)* 0.9);
+    /* we want the mark size to be 90% of the cell size */
+}
+
+
+body {
+    margin: 0;
+/* remove margins on the page */
+}
+
+.board{
+width: 100vw;
+height: 100vh;
+/* this is going to make our board to be fill the entir 
+screenm so we can easily center it inside of our screen */
+display: grid;
+/* to layout our items inside this grid */
+justify-content: center;
+align-content: center;
+/* this is going to center our board element so everything
+inside of the board is gonna be centered inside of the board div */
+grid-template-columns: repeat(3,auto);
+/* we're gonna have all 3 columns all auto sized */
+justify-items: center;
+align-items: center;
+/* to make sure our x's and o's are always centered inside their box */
+}
+
+.cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    /* background-color: salmon; */
+    border: 3.5px solid black ;
+    /* after giving border, we have 3x3 grid showing up */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.cell:first-child,
+.cell:nth-child(2),
+.cell:nth-child(3) {
+      border-top: none;
+}
+/* we have extra borders around the outsides that we want to get rid of- now we're getting rid of the top border */
+
+.cell:nth-child(3n+1) {
+    border-left: none;
+}
+/*  instead of writing 1,4,7 we can write 3n+1 - now we are getting rid of the left side border*/
+
+.cell:nth-child(3n+3) {
+    border-right: none;
+}
+/*  instead of writing 3,6,9 we can write 3n+3 - now we are getting rid of the right side border*/
+
+.cell:last-child,
+.cell:nth-child(8),
+.cell:nth-child(7) {
+    border-bottom: none;
+}
+/* getting rid of the bottom border */
+
+.cell.x,
+.cell.circle{
+    cursor: not-allowed;
+}
+
+.cell.x::before,
+.cell.x::after {
+background-color: darkred ;
+}
+
+.cell.circle::before,
+.cell.circle::after{
+    background-color: darkred;
+}
+
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after {
+background-color: lightsalmon ;
+}
+
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+background-color: lightsalmon ;
+}
+
+/* in order to determine who's turn it is */
+
+.cell.x::before,
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after {
+/* write not x and not o so we have hover only on not selected cells */
+content:'';
+position: absolute;
+/* if we didnt position them absolutely they will look offset 
+because both x before and after displayed next to each other
+in the document flow because their position is static*/
+width: calc(var(--mark-size)* .18);
+/* 15% of the height of our X */
+height: var(--mark-size);
+/* background-color: darkred ; */
+}
+/* create X shape */
+
+.cell.x::before,
+.board.x .cell:not(.x):not(.circle):hover::before{
+    transform: rotate(45deg);
+}
+
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::after{
+    transform: rotate(-45deg);
+}
+
+.cell.circle::before,
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+content:'';
+position: absolute;
+border-radius: 50%;
+}
+/* create circle shape */
+
+.cell.circle::before,
+.board.circle .cell:not(.x):not(.circle):hover::before{
+ width: var(--mark-size);
+height: var(--mark-size);   
+/* we want this to be larger of our circles because we want it
+to be behid the other smaller circle */
+/* background-color: darkred ; */
+}
+
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::after{
+    width: calc(var(--mark-size) *.65);
+    height: calc(var(--mark-size) *.65);   
+    /* we want this circle to be smaller */
+    background-color: white; 
+}
+
+.winning-message {
+    /* display: none; */
+    /* since we dont want it display by default */
+    /*  position: fixed;  */
+    /* top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; */
+    background-color: rgba(240, 73, 73, 0.3) ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-size: 50px;
+    flex-direction: column;
+}  
+
+.winning-message button{
+    display: flex;
+    /* since we dont want it display by default */
+    /* I supposed to not set display here as long as i set it above
+    butit was not working for me */
+     font-size: 50px;
+    background-color: rgba(240, 73, 73, 0.5);
+    border: 1px solid maroon;
+    padding: .25em .5em;
+    cursor: pointer;
+} 
+
+.winning-message button:hover{
+    background-color: maroon;
+    border: 1 px solid rgba(240, 73, 73, 0.9);
+    color: whitesmoke;
+}
+
+.winning-message.show {
+    display: flex;
+}
